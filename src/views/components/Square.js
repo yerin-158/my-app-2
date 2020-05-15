@@ -1,10 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
-const Square = ({index}) => {
-    const [value, setValue] = useState(index);
-
+const Square = ({value, index, handleClick}) => {
     return (
-        <button className="square" onClick={() => setValue('X')}>
+        <button className="square" data-index={index} onClick={handleClick}>
             {value}
         </button>
     );
