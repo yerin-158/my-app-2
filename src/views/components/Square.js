@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useState} from "react";
 
-const Square = (index) => {
-    console.log(index);
+const Square = ({index}) => {
+    const [value, setValue] = useState(index);
+
     return (
-        <button className="square">
-            {/* TODO */}
+        <button className="square" onClick={() => setValue('X')}>
+            {value}
         </button>
     );
 }
