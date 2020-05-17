@@ -7,14 +7,15 @@ const Board = ({init}) => {
     const [xIsNext, setXIsNext] = useState(true);
 
     const handleClick = (event) => {
-        setSquares(getNewSquares(event));
-        setXIsNext(!xIsNext);
+        const [row, column] = getLocation(event);
+        if ( squares[row][column].value == null ){
+            setSquares(getNewSquares(row, column));
+            setXIsNext(!xIsNext);
+        }
     }
 
-    const getNewSquares = (event) => {
-        const [row, column] = getLocation(event);
+    const getNewSquares = (row, column) => {
         var newSquares = squares.slice();
-        // eslint-disable-next-line no-unused-expressions
         newSquares[row][column].value = (xIsNext ? 'X' : 'O')
         return newSquares;
     }
