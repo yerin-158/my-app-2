@@ -2,11 +2,12 @@ import React, {useEffect, useState} from "react";
 import Square from "./Square.js";
 
 const Board = ({init}) => {
-    const status = 'Next Player : ';
+    const explain = 'Next Player : ';
+    const [status, setStatus] = useState(explain + 'X');
     const [squares, setSquares] = useState(init);
     const [xIsNext, setXIsNext] = useState(true);
     const [winner, setWinner] = useState(null);
-
+    const [clickCount, setClickCount] = useState(0);
 
     useEffect(() => {
         const lines = [
@@ -24,9 +25,15 @@ const Board = ({init}) => {
             const [a, b, c] = lines[i];
             if (isWin(getLocation(a), getLocation(b), getLocation(c))) {
                 setWinner(xIsNext ? 'O' : 'X');
-                break;
+                return;
             }
         }
+
+        if(clickCount == squares.length * squares[0].length){
+            setStatus('GAME-OVER');
+            return;
+        }
+
     }, [squares]);
 
     const isWin = (...locations) => {
@@ -43,7 +50,9 @@ const Board = ({init}) => {
     const handleClick = (event) => {
         const [row, column] = getLocation(event.target.dataset.index);
         if (squares[row][column].value == null) {
+            setClickCount(clickCount+1);
             setSquares(getNewSquares(row, column));
+            setStatus(explain + (!xIsNext ? 'X' : 'O'));
             setXIsNext(!xIsNext);
         }
     }
@@ -63,8 +72,8 @@ const Board = ({init}) => {
     return (
         <div>
             {winner == null ?
-                <div className="status">{status + (xIsNext ? 'X' : 'O')}</div> :
-                <div className="status">{'Winner is ' + winner + ' !!!'}</div>
+                <div className="status"><h3>{status}</h3></div> :
+                <div className="status"><h3>{'Winner is ' + winner + ' !!!'}</h3></div>
             }
             {squares.map(row =>
                 <div className="board-row">
