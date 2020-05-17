@@ -85,11 +85,11 @@ const Game = () => {
         return [row, column];
     }
 
-    const jumpTo = (step) => {
-        setStatus(explain + (step % 2 === 0 ? 'X' : 'O'));
-        setXIsNext(step % 2 === 0);
-        setHistory(history.slice(0, step + 1));
-        setClickCount(step);
+    const jumpTo = (move) => {
+        setStatus(explain + (move % 2 === 0 ? 'X' : 'O'));
+        setXIsNext(move % 2 === 0);
+        setHistory(history.slice(0, move + 1));
+        setClickCount(move);
         if(winner != null){
             setWinner(null);
         }
