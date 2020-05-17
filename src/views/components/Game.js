@@ -70,13 +70,12 @@ const Game = () => {
             setHistory(history.concat({squares: getNewSquares(row, column)}));
             setStatus(explain + (!xIsNext ? 'X' : 'O'));
             setXIsNext(!xIsNext);
-            console.log(history);
         }
     }
 
     const getNewSquares = (row, column) => {
-        var newSquares = history[history.length - 1].squares;
-        newSquares[row][column].value = (xIsNext ? 'X' : 'O')
+        var newSquares = JSON.parse(JSON.stringify(history[history.length - 1].squares));
+        newSquares[row][column].value = (xIsNext ? 'X' : 'O');
         return newSquares;
     }
 
@@ -84,6 +83,16 @@ const Game = () => {
         var row = parseInt(index / MAXIMUM_ROW);
         var column = index - MAXIMUM_COLUMN * row;
         return [row, column];
+    }
+
+    const jumpTo = (step) => {
+        setStatus(explain + (step % 2 === 0 ? 'X' : 'O'));
+        setXIsNext(step % 2 === 0);
+        setHistory(history.slice(0, step + 1));
+        setClickCount(step);
+        if(winner != null){
+            setWinner(null);
+        }
     }
 
     return (
@@ -101,7 +110,15 @@ const Game = () => {
                     <div className="status">{status}</div> :
                     <div className="status">{'Winner is ' + winner + ' !!!'}</div>
                 }
-                <ol>{/* TODO */}</ol>
+                <ol>{
+                    history.map((step, move) => {
+                        return <li key={move}>
+                            <button onClick={() => jumpTo(move)}>
+                                {move ? 'Go to move #' + move : 'Go to game start'}
+                            </button>
+                        </li>
+                    })
+                }</ol>
             </div>
         </div>
     );
