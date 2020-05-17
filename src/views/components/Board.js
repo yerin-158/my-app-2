@@ -1,73 +1,7 @@
 import React, {useEffect, useState} from "react";
 import Square from "./Square.js";
 
-const Board = ({init}) => {
-    const explain = 'Next Player : ';
-    const [status, setStatus] = useState(explain + 'X');
-    const [squares, setSquares] = useState(init);
-    const [xIsNext, setXIsNext] = useState(true);
-    const [winner, setWinner] = useState(null);
-    const [clickCount, setClickCount] = useState(0);
-
-    useEffect(() => {
-        const lines = [
-            [0, 1, 2],
-            [3, 4, 5],
-            [6, 7, 8],
-            [0, 3, 6],
-            [1, 4, 7],
-            [2, 5, 8],
-            [0, 4, 8],
-            [2, 4, 6],
-        ];
-
-        for (let i = 0; i < lines.length; ++i) {
-            const [a, b, c] = lines[i];
-            if (isWin(getLocation(a), getLocation(b), getLocation(c))) {
-                setWinner(xIsNext ? 'O' : 'X');
-                return;
-            }
-        }
-
-        if(clickCount == squares.length * squares[0].length){
-            setStatus('GAME-OVER');
-            return;
-        }
-
-    }, [squares]);
-
-    const isWin = (...locations) => {
-        for (let i = 1; i < locations.length; ++i) {
-            const [rowNow, colNow] = locations[i - 1];
-            const [rowNext, colNext] = locations[i];
-            if (squares[rowNow][colNow].value == null || squares[rowNow][colNow].value !== squares[rowNext][colNext].value) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    const handleClick = (event) => {
-        const [row, column] = getLocation(event.target.dataset.index);
-        if (squares[row][column].value == null) {
-            setClickCount(clickCount+1);
-            setSquares(getNewSquares(row, column));
-            setStatus(explain + (!xIsNext ? 'X' : 'O'));
-            setXIsNext(!xIsNext);
-        }
-    }
-
-    const getNewSquares = (row, column) => {
-        var newSquares = squares.slice();
-        newSquares[row][column].value = (xIsNext ? 'X' : 'O')
-        return newSquares;
-    }
-
-    const getLocation = (index) => {
-        var row = parseInt(index / squares[0].length);
-        var column = index - squares[0].length * row;
-        return [row, column];
-    }
+const Board = ({squares, handleClick, status, winner}) => {
 
     return (
         <div>

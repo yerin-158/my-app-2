@@ -1,29 +1,106 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Board from './Board.js';
 
 const Game = () => {
 
+    const MAXIMUM_ROW = 3, MAXIMUM_COLUMN = 3;
     const initializeSquares = () => {
-        const ROW = 3, COLUMN = 3;
-        const init = Array(ROW).fill(null);
-        for(var i = 0; i<ROW; ++i){
-            var columns = Array(COLUMN).fill(null);
-            for(var j = 0; j<COLUMN; ++j){
-                // eslint-disable-next-line no-unused-expressions
-                columns[j] = {index: i*COLUMN+j, value: null};
+        const init = Array(MAXIMUM_ROW).fill(null);
+        for (var i = 0; i < MAXIMUM_ROW; ++i) {
+            var columns = Array(MAXIMUM_COLUMN).fill(null);
+            for (var j = 0; j < MAXIMUM_COLUMN; ++j) {
+                columns[j] = {index: i * MAXIMUM_COLUMN + j, value: null};
             }
             init[i] = columns;
         }
-        return init;
+        return [{squares: init}];
+    }
+
+    const explain = 'Next Player : ';
+    const [status, setStatus] = useState(explain + 'X');
+    const [history, setHistory] = useState(initializeSquares);
+    const [xIsNext, setXIsNext] = useState(true);
+    const [winner, setWinner] = useState(null);
+    const [clickCount, setClickCount] = useState(0);
+
+    useEffect(() => {
+        const lines = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6],
+        ];
+
+        for (let i = 0; i < lines.length; ++i) {
+            const [a, b, c] = lines[i];
+            if (isWin(getLocation(a), getLocation(b), getLocation(c))) {
+                setWinner(xIsNext ? 'O' : 'X');
+                return;
+            }
+        }
+
+        if (clickCount == MAXIMUM_ROW * MAXIMUM_COLUMN) {
+            setStatus('GAME-OVER');
+            return;
+        }
+
+    }, [history]);
+
+    const isWin = (...locations) => {
+        for (let i = 1; i < locations.length; ++i) {
+            const [rowNow, colNow] = locations[i - 1];
+            const [rowNext, colNext] = locations[i];
+            const mostRecentSquares = history[history.length - 1].squares;
+            if (mostRecentSquares[rowNow][colNow].value == null
+                || mostRecentSquares[rowNow][colNow].value !== mostRecentSquares[rowNext][colNext].value) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    const handleClick = (event) => {
+        const [row, column] = getLocation(event.target.dataset.index);
+        if (history[history.length - 1].squares[row][column].value == null) {
+            setClickCount(clickCount + 1);
+            setHistory(history.concat({squares: getNewSquares(row, column)}));
+            setStatus(explain + (!xIsNext ? 'X' : 'O'));
+            setXIsNext(!xIsNext);
+            console.log(history);
+        }
+    }
+
+    const getNewSquares = (row, column) => {
+        var newSquares = history[history.length - 1].squares;
+        newSquares[row][column].value = (xIsNext ? 'X' : 'O')
+        return newSquares;
+    }
+
+    const getLocation = (index) => {
+        var row = parseInt(index / MAXIMUM_ROW);
+        var column = index - MAXIMUM_COLUMN * row;
+        return [row, column];
     }
 
     return (
         <div className="game">
             <div className="game-board">
-                <Board init={initializeSquares}/>
+                <Board
+                    squares={history[history.length - 1].squares}
+                    handleClick={handleClick}
+                    status={status}
+                    winner={winner}
+                />
             </div>
             <div className="game-info">
-                <div>{/* status */}</div>
+                {winner == null ?
+                    <div className="status">{status}</div> :
+                    <div className="status">{'Winner is ' + winner + ' !!!'}</div>
+                }
                 <ol>{/* TODO */}</ol>
             </div>
         </div>
