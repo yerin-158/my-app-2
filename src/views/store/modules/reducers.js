@@ -15,33 +15,35 @@ const initializeSquares = () => {
 }
 
 const initialState = {
-    history : initializeSquares(),
-    xIsNext : true,
-    clickCount : 0,
-    status : 'Next Player : X'
+    history: initializeSquares(),
+    xIsNext: true,
+    clickCount: 0,
+    status: 'Next Player : X'
 }
 
 export default handleActions({
-    [type.SQUARE_CLICK]: (state, action) => ({
-        ...state,
-        history: state.history.concat({squares : action.payload}),
-        status: 'Next Player : '+(state.xIsNext ? 'O' : 'X'),
-        xIsNext: !state.xIsNext,
-        clickCount: state.clickCount+1,
-    }),
-    [type.GO_TO_HISTORY]: (state, action) => ({
-        ...state,
-        history: state.history.slice(0, action.payload + 1),
-        clickCount: action.payload
-    }),
-    [type.WINNER_DETERMINED]: (state, action) => ({
-        ...state,
-        status: 'Winner is '+(state.xIsNext ? 'O' : 'X')
-    }),
-    [type.DRAW_ENDS]: (state, action) => ({
-        ...state,
-        status : 'GAME-OVER'
-    })
-  },
-  initialState
+        [type.SQUARE_CLICK]: (state, action) => ({
+            ...state,
+            history: state.history.concat({squares: action.payload}),
+            status: 'Next Player : ' + (state.xIsNext ? 'O' : 'X'),
+            xIsNext: !state.xIsNext,
+            clickCount: state.clickCount + 1,
+        }),
+        [type.GO_TO_HISTORY]: (state, action) => ({
+            ...state,
+            status: 'Next Player : ' + (action.payload % 2 === 0 ? 'X' : 'O'),
+            xIsNext: (action.payload % 2 === 0),
+            history: state.history.slice(0, action.payload + 1),
+            clickCount: action.payload
+        }),
+        [type.WINNER_DETERMINED]: (state, action) => ({
+            ...state,
+            status: 'Winner is ' + (state.xIsNext ? 'O' : 'X')
+        }),
+        [type.DRAW_ENDS]: (state, action) => ({
+            ...state,
+            status: 'GAME-OVER'
+        })
+    },
+    initialState
 );
