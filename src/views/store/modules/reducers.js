@@ -1,5 +1,5 @@
 import {handleActions} from 'redux-actions'
-import {type} from './types';
+import type from './types';
 
 const initializeSquares = () => {
     const MAXIMUM_ROW = 3, MAXIMUM_COLUMN = 3;
@@ -31,7 +31,8 @@ export default handleActions({
     }),
     [type.GO_TO_HISTORY]: (state, action) => ({
         ...state,
-        history: state.history.slice(0, action.payload + 1)
+        history: state.history.slice(0, action.payload + 1),
+        clickCount: action.payload
     }),
     [type.WINNER_DETERMINED]: (state, action) => ({
         ...state,
