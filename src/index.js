@@ -6,9 +6,9 @@ import rootReducer from './views/store/modules/reducers';
 
 import { Provider } from 'react-redux';
 
-import Game from './views/components/Game';
 import './index.css';
 import BoardContainer from "./views/containers/BoardContainer";
+import TimeLineContainer from "./views/containers/TimeLineContainer";
 
 const store = createStore(rootReducer);
 console.log(store.getState());
@@ -16,6 +16,7 @@ console.log(store.getState());
 ReactDOM.render(
     <Provider store={store}>
         <BoardContainer />
+        <TimeLineContainer />
     </Provider>,
     document.getElementById('root')
 );
