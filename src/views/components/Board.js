@@ -1,14 +1,11 @@
 import React, {useEffect, useState} from "react";
 import Square from "./Square.js";
 
-const Board = ({squares, handleClick, status, winner}) => {
+const Board = ({squares, handleClick, status}) => {
 
     return (
         <div>
-            {winner == null ?
-                <div className="status"><h3>{status}</h3></div> :
-                <div className="status"><h3>{'Winner is ' + winner + ' !!!'}</h3></div>
-            }
+            <div className="status"><h3>{status}</h3></div>
             {squares.map(row =>
                 <div className="board-row">
                     {row.map(column =>
