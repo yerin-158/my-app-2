@@ -4,7 +4,7 @@ import Square from "./Square.js";
 const Board = ({squares, handleClick, status}) => {
 
     return (
-        <div>
+        <div className="game-board">
             <div className="status"><h3>{status}</h3></div>
             {squares.map(row =>
                 <div className="board-row">

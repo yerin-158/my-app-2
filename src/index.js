@@ -15,8 +15,10 @@ console.log(store.getState());
 
 ReactDOM.render(
     <Provider store={store}>
-        <BoardContainer />
-        <TimeLineContainer />
+        <div className="game">
+            <BoardContainer />
+            <TimeLineContainer />
+        </div>
     </Provider>,
     document.getElementById('root')
 );

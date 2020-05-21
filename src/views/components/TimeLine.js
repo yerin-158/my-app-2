@@ -3,7 +3,7 @@ import React from "react";
 const TimeLine = ({status, history, goToHistory}) => {
 
     return (
-        <div>
+        <div className="game-info">
             <div className="status">{status}</div>
             <ol>{
                 history.map((step, move) => {
