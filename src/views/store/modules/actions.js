@@ -1,5 +1,5 @@
 import { createAction } from 'redux-actions';
-import { type } from './types';
+import type from './types';
 
 export const squareClick = createAction(
     type.SQUARE_CLICK, squares => squares
@@ -15,4 +15,4 @@ export const winnerDetermined = createAction(
 
 export const drawEnds = createAction(
     type.DRAW_ENDS
-)
+);
